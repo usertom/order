@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Custom DataGrid Pager - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../demo.css">
+	<script type="text/javascript" src="../../jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		loadList();
+	});
+	function loadList(){
+	$.messager.alert('警告','警告消息');
+		$('#dg').datagrid({    
+		url:'1.json',    
+		columns:[[    
+			{field:'code',title:'Code',width:100},    
+			{field:'name',title:'Name',width:100},    
+			{field:'price',title:'Price',width:100,align:'right'}    
+		]]    
+	});
+	}
+	</script>
+</head>
+<body>
+	<h2>Custom DataGrid Pager</h2>
+	<div class="demo-info">
+		<div class="demo-tip icon-tip"></div>
+		<div>You can append some buttons to the standard datagrid pager bar.</div>
+	</div>
+	<div style="margin:10px 0;"></div>
+	<table id="dg"></table> 
+	<script type="text/javascript">
+		$(function(){
+			var pager = $('#dg').datagrid('getPager');	// get the pager of datagrid
+			pager.pagination({
+				buttons:[{
+					iconCls:'icon-search',
+					handler:function(){
+						alert('search');
+					}
+				},{
+					iconCls:'icon-add',
+					handler:function(){
+						alert('add');
+					}
+				},{
+					iconCls:'icon-edit',
+					handler:function(){
+						alert('edit');
+					}
+				}]
+			});			
+		})
+	</script>
+</body>
+</html>

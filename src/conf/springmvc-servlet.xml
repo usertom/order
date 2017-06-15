@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans    
+    xmlns="http://www.springframework.org/schema/beans"    
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"    
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd    
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">   
+
+    <context:component-scan base-package="com.order.controller" />
+    
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>  
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <mvc:resources mapping="/upload/**" location="/upload/"/>
+    <!-- 注册DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapte -->
+	<mvc:annotation-driven>
+	<mvc:message-converters register-defaults="true">
+	    <!-- StringHttpMessageConverter编码为UTF-8，防止乱码 -->
+	    <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	        <property name = "supportedMediaTypes">
+	            <list>
+	                <bean class="org.springframework.http.MediaType">
+	                    <constructor-arg index="0" value="text"/>
+	                    <constructor-arg index="1" value="plain"/>
+	                    <constructor-arg index="2" value="UTF-8"/>
+	                </bean>
+	                <bean class="org.springframework.http.MediaType">
+	                    <constructor-arg index="0" value="*"/>
+	                    <constructor-arg index="1" value="*"/>
+	                    <constructor-arg index="2" value="UTF-8"/>
+	                </bean>
+	            </list>
+	        </property>
+	    </bean>
+	    <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>  
+	    <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+        <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+            <property name="supportedMediaTypes">
+                <list>
+                    <value>application/json;charset=UTF-8</value>
+                </list>
+            </property>
+            <property name="features">  
+	        <array value-type="com.alibaba.fastjson.serializer.SerializerFeature">  
+	           <value>DisableCircularReferenceDetect</value>  
+	        </array>  
+	      </property> 
+        </bean>
+	</mvc:message-converters>
+	</mvc:annotation-driven>
+    <!-- 配置MultipartResolver 用于文件上传 使用spring的CommosMultipartResolver -->  
+	<bean id="multipartResolver"  
+	    class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+	    <property name="defaultEncoding" value="utf-8" />  
+	    <property name="maxUploadSize" value="10485760000" />  
+	    <property name="maxInMemorySize" value="40960" />  
+	</bean>   
+		
+</beans> 
